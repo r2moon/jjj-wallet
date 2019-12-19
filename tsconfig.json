@@ -1,4 +1,5 @@
 {
+  "extends": "tslint-config-standard",
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
