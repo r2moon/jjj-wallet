@@ -50,7 +50,6 @@ export default class Ethereum {
       }
 
       // this.web3.eth.estimateGas(rawTx)
-
       try {
         const signedTx = await this.web3.eth.accounts.signTransaction(rawTx, this.privateKey);
         console.log(signedTx)
