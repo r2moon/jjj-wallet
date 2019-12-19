@@ -91,7 +91,7 @@ export default class Ethereum {
   private async _fetchBalance() {
     try {
       const balance = await this.web3.eth.getBalance(this.address);
-      this._balance = new BN(balance)
+      this._balance = new BN(balance);
     } catch (error) {
       console.error(error);
     }
@@ -99,7 +99,7 @@ export default class Ethereum {
 
   // getter and setters
   get address(): string {
-    return this._address
+    return this._address;
   }
   set address(value: string) {
     this._address = value;

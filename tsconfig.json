@@ -1,5 +1,4 @@
 {
-  "extends": "tslint-config-standard",
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
@@ -13,6 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
+      "vuetify",
       "webpack-env",
       "jest"
     ],
