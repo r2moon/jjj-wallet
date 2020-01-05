@@ -15,6 +15,7 @@ export abstract class IWallet {
   abstract _address: string;
   abstract _privateKey: string;
   abstract _balance: BN = new BN(0);
+  abstract _isTestnet: boolean = false;
 
   abstract async send(
     recipientId: string,
@@ -24,7 +25,6 @@ export abstract class IWallet {
   abstract async resync(): Promise<void>;
 
   abstract get address(): string;
-  abstract set address(value: string);
 
   abstract get balance(): string;
 }

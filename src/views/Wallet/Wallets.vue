@@ -1,20 +1,19 @@
 <template>
   <div class="Wallets">
     <v-tabs vertical>
-      <v-tab>
-        Ethereum
+      <v-tab
+        :key="`tab-${coin.info.name}${index}`"
+        v-for="(coin, index) in coins"
+      >
+        {{ coin.info.name }}
       </v-tab>
-      <v-tab-item>
-        <Wallet />
-      </v-tab-item>
-      <v-tab>
-        Bitcoin
-      </v-tab>
-      <v-tab-item>
-        <Wallet />
+      <v-tab-item
+        :key="`tab-item-${coin.info.name}${index}`"
+        v-for="(coin, index) in coins"
+      >
+        <Wallet :coin="coin" />
       </v-tab-item>
     </v-tabs>
-    
   </div>
 </template>
 
@@ -23,6 +22,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import Wallet from "@/components/Wallet/Wallet.vue";
 import { Coin, CoinInfo, IWallet } from "@/types";
 import { Ethereum } from "@/services/coins";
+import { importCoins } from "@/services/utils/coin";
 
 @Component({
   components: {
@@ -30,16 +30,7 @@ import { Ethereum } from "@/services/coins";
   }
 })
 export default class Wallets extends Vue {
-  coin: Coin = {
-    info: {
-      name: "Ethereum",
-      ticker: "ETH",
-      logo: require("@/assets/coins/ethereum/logo.png")
-    },
-    wallet: new Ethereum(
-      "fe61bdcbaeb8a46f2b4aec50ba6e400efdd0b82cd3e3212259f9c96daa99e65e"
-    )
-  }
+  coins: [Coin] = importCoins(true);
 }
 </script>
 

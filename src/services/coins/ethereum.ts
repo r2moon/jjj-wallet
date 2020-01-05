@@ -3,13 +3,16 @@ import Web3 from "web3";
 
 import { IWallet } from "@/types";
 
-const provider =
-  "https://ropsten.infura.io/v3/3549ffbbb03c4db980fc105360617370";
+const provider = {
+  testnet: "https://ropsten.infura.io/v3/3549ffbbb03c4db980fc105360617370",
+  mainnet: "https://mainnet.infura.io/v3/3549ffbbb03c4db980fc105360617370"
+};
 
 export default class Ethereum extends IWallet {
   _address: string = "";
   _privateKey: string = "";
   _balance: BN = new BN(-1);
+  _isTestnet: boolean = false;
   private _nonce: number = 0;
   private web3: Web3;
 
@@ -18,9 +21,21 @@ export default class Ethereum extends IWallet {
    *
    * @param privateKey {string} optional
    */
-  constructor(privateKey?: string) {
+  constructor(privateKey?: string, isTestnet?: boolean) {
     super();
-    this.web3 = new Web3(new Web3.providers.HttpProvider(provider));
+
+    if (isTestnet === true) {
+      this._isTestnet = true;
+    } else {
+      this._isTestnet = false;
+    }
+
+    console.log(this._isTestnet);
+    if (this._isTestnet) {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(provider.testnet));
+    } else {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(provider.mainnet));
+    }
 
     if (privateKey) {
       if (!privateKey.startsWith("0x")) {
@@ -28,11 +43,11 @@ export default class Ethereum extends IWallet {
       }
       const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
       this._privateKey = account.privateKey;
-      this.address = account.address;
+      this._address = account.address;
     } else {
       const account = this.web3.eth.accounts.create();
       this._privateKey = account.privateKey;
-      this.address = account.address;
+      this._address = account.address;
     }
 
     this.resync();
@@ -103,12 +118,9 @@ export default class Ethereum extends IWallet {
     }
   }
 
-  // getter and setters
+  // getter
   public get address(): string {
     return this._address;
-  }
-  public set address(value: string) {
-    this._address = value;
   }
 
   public get balance(): string {

@@ -1,24 +1,36 @@
 <template>
   <div class="wallet">
     <div class="d-flex flex-column align-center">
-      <img :src="coin.info.logo" class="wallet--logo"/>
-      <h1>{{ wallet.balance }} {{ coin.info.ticker }}</h1>
+      <img :src="coinInfo.logo" class="wallet--logo" />
+      <h1>{{ wallet.balance }} {{ coinInfo.ticker }}</h1>
       <div class="d-flex flex-row mt-5">
         <div class="float-right">
-          <v-btn outlined @click="toggleSendOverlay" class="send--receive-btn mr-2">SEND</v-btn>
+          <v-btn
+            outlined
+            @click="toggleSendOverlay"
+            class="send--receive-btn mr-2"
+          >
+            SEND
+          </v-btn>
         </div>
         <div class="float-left">
-          <v-btn outlined @click="toggleReceiveOverlay" class="send--receive-btn ml-2">RECEIVE</v-btn>
+          <v-btn
+            outlined
+            @click="toggleReceiveOverlay"
+            class="send--receive-btn ml-2"
+          >
+            RECEIVE
+          </v-btn>
         </div>
       </div>
     </div>
     <v-overlay :value="overlaySend" opacity="0.9">
-      <WalletSend :coin="coin.info" @send="send" @close="toggleSendOverlay" />
+      <WalletSend :coin="coinInfo" @send="send" @close="toggleSendOverlay" />
     </v-overlay>
     <v-overlay :value="overlayReceive" opacity="0.9">
       <WalletReceive
         :address="wallet.address"
-        :name="coin.info.name"
+        :name="coinInfo.name"
         @close="toggleReceiveOverlay"
       />
     </v-overlay>
@@ -40,21 +52,7 @@ import { Ethereum } from "@/services/coins";
 export default class Wallet extends Vue {
   overlayReceive: boolean = false;
   overlaySend: boolean = false;
-
-  coinInfo: CoinInfo = {
-    name: "Ethereum",
-    ticker: "ETH",
-    logo: require("@/assets/coins/ethereum/logo.png")
-  };
-
-  wallet: IWallet = new Ethereum(
-    "fe61bdcbaeb8a46f2b4aec50ba6e400efdd0b82cd3e3212259f9c96daa99e65e"
-  );
-
-  coin: Coin = {
-    info: this.coinInfo,
-    wallet: this.wallet
-  }
+  @Prop() coin!: Coin;
 
   send(sendInfo: SendInfo) {
     this.wallet.send(sendInfo.recipient, sendInfo.amount);
@@ -66,6 +64,14 @@ export default class Wallet extends Vue {
 
   toggleSendOverlay() {
     this.overlaySend = !this.overlaySend;
+  }
+
+  get wallet(): IWallet {
+    return this.coin.wallet;
+  }
+
+  get coinInfo(): CoinInfo {
+    return this.coin.info;
   }
 }
 </script>
