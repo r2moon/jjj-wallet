@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "wallets",
+    name: "Wallets",
     component: () =>
       import(/* webpackChunkName: "about" */ "@/views/Wallet/Wallets.vue")
   }

@@ -1,13 +1,15 @@
 import BN from "bn.js";
 import Web3 from "web3";
 
+import { IWallet } from "@/types";
+
 const provider =
   "https://ropsten.infura.io/v3/3549ffbbb03c4db980fc105360617370";
 
-export default class Ethereum {
-  private _address: string = "";
-  private _privateKey: string = "";
-  private _balance: BN = new BN(-1);
+export default class Ethereum extends IWallet {
+  _address: string = "";
+  _privateKey: string = "";
+  _balance: BN = new BN(-1);
   private _nonce: number = 0;
   private web3: Web3;
 
@@ -17,6 +19,7 @@ export default class Ethereum {
    * @param privateKey {string} optional
    */
   constructor(privateKey?: string) {
+    super();
     this.web3 = new Web3(new Web3.providers.HttpProvider(provider));
 
     if (privateKey) {
@@ -24,18 +27,18 @@ export default class Ethereum {
         privateKey = "0x" + privateKey;
       }
       const account = this.web3.eth.accounts.privateKeyToAccount(privateKey);
-      this.privateKey = account.privateKey;
+      this._privateKey = account.privateKey;
       this.address = account.address;
     } else {
       const account = this.web3.eth.accounts.create();
-      this.privateKey = account.privateKey;
+      this._privateKey = account.privateKey;
       this.address = account.address;
     }
 
     this.resync();
   }
 
-  async send(recipientId: string, amount: string | number) {
+  async send(recipientId: string, amount: string | number): Promise<string> {
     const amountWei = new BN(this.web3.utils.toWei(amount.toString()));
 
     if (this._balance.cmp(amountWei) >= 0) {
@@ -54,7 +57,7 @@ export default class Ethereum {
       try {
         const signedTx = await this.web3.eth.accounts.signTransaction(
           rawTx,
-          this.privateKey
+          this._privateKey
         );
         console.log(signedTx);
         if (signedTx.rawTransaction) {
@@ -64,16 +67,19 @@ export default class Ethereum {
           console.log("==Receipt==");
           console.log(txReceipt);
           this._nonce += 1;
+          return txReceipt.transactionHash;
         } else {
           console.error("Invalid Transaction - rawTx is empty");
+          throw new Error("Invalid Transaction - rawTx is empty");
         }
       } catch (error) {
         console.error(error);
       }
     } else {
       console.log("No enough balance");
-      return null;
+      throw new Error("No enough balance");
     }
+    return "";
   }
 
   async _fetchTransactionCount() {
@@ -98,23 +104,14 @@ export default class Ethereum {
   }
 
   // getter and setters
-  get address(): string {
+  public get address(): string {
     return this._address;
   }
-  set address(value: string) {
+  public set address(value: string) {
     this._address = value;
   }
 
-  get privateKey(): string {
-    return this._privateKey;
-  }
-  set privateKey(value: string) {
-    this._privateKey = value;
-  }
-  get balance(): string {
-    if (this._balance.cmp(new BN(0)) === -1) {
-      // this._fetchBalance();
-    }
+  public get balance(): string {
     const humanBalance = this.web3.utils.fromWei(this._balance);
     return humanBalance;
   }

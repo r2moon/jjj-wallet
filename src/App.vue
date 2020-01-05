@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <router-link :to="{ name: 'Wallets' }">Wallets</router-link>
+      <router-link :to="{ name: 'Wallets' }" class="white--text">Wallets</router-link>
     </v-app-bar>
 
     <v-content>
