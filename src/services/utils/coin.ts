@@ -1,7 +1,7 @@
 import { Coin, CoinInfo, IWallet } from "@/types";
-import { Ethereum } from "@/services/coins";
+import { Bitcoin, Ethereum } from "@/services/coins";
 
-const importCoins = (isTestnet?: boolean): [Coin] => {
+const importCoins = (isTestnet?: boolean): Array<Coin> => {
   const ethereum: Coin = {
     info: {
       name: "Ethereum",
@@ -14,7 +14,20 @@ const importCoins = (isTestnet?: boolean): [Coin] => {
     )
   };
 
-  return [ethereum];
+  const bitcoin: Coin = {
+    info: {
+      name: "Bitcoin",
+      ticker: "BTC",
+      logo: require("@/assets/coins/ethereum/logo.png")
+    },
+    wallet: new Bitcoin(
+      // null,
+      "cVZi5icYGEUFJTUyEakSb3RLCEAocqeornzH5YzRVJ9mLfkjJtCf",
+      isTestnet
+    )
+  };
+
+  return [ethereum, bitcoin];
 };
 
 export { importCoins };

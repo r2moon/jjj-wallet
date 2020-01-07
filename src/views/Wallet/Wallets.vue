@@ -30,7 +30,7 @@ import { importCoins } from "@/services/utils/coin";
   }
 })
 export default class Wallets extends Vue {
-  coins: [Coin] = importCoins(true);
+  coins: Array<Coin> = importCoins(true);
 }
 </script>
 

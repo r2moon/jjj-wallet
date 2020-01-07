@@ -10,8 +10,9 @@ const provider = {
 
 export default class Ethereum extends IWallet {
   _address: string = "";
+  _publicKey: string = "";
   _privateKey: string = "";
-  _balance: BN = new BN(-1);
+  _balance: BN | null= null;
   _isTestnet: boolean = false;
   private _nonce: number = 0;
   private web3: Web3;
@@ -30,7 +31,6 @@ export default class Ethereum extends IWallet {
       this._isTestnet = false;
     }
 
-    console.log(this._isTestnet);
     if (this._isTestnet) {
       this.web3 = new Web3(new Web3.providers.HttpProvider(provider.testnet));
     } else {
@@ -56,7 +56,7 @@ export default class Ethereum extends IWallet {
   async send(recipientId: string, amount: string | number): Promise<string> {
     const amountWei = new BN(this.web3.utils.toWei(amount.toString()));
 
-    if (this._balance.cmp(amountWei) >= 0) {
+    if (this._balance !== null && this._balance.cmp(amountWei) >= 0) {
       // enough balance
       var rawTx = {
         nonce: this._nonce,
@@ -118,12 +118,15 @@ export default class Ethereum extends IWallet {
     }
   }
 
-  // getter
+  // getters
   public get address(): string {
     return this._address;
   }
 
   public get balance(): string {
+    if (this._balance === null) {
+      return "0";
+    }
     const humanBalance = this.web3.utils.fromWei(this._balance);
     return humanBalance;
   }

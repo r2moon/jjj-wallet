@@ -7,7 +7,7 @@
     </div>
     <div class="d-flex flex-column align-center justify-center mx-auto my-auto">
       <div>Your {{ name }} Address</div>
-      <v-btn class="my-5" @click="onCopy">{{ address }}</v-btn>
+      <v-btn class="my-5 text-none" @click="onCopy">{{ address }}</v-btn>
       <Qrcode :value="address" />
     </div>
   </div>
