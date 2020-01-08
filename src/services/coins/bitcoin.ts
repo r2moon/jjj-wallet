@@ -15,7 +15,7 @@ const toSatoshi = (value: number) => {
 
 const fromSatoshi = (value: number) => {
   return value / SATOSHI;
-}
+};
 
 /**
  * Response Type of Blockcypher api
@@ -110,18 +110,28 @@ export default class Bitcoin extends IWallet {
     if (Number.isNaN(parsedAmount)) {
       throw new Error("Invalid amount: " + amount);
     }
-    
+
     const satoshiToSend = toSatoshi(parsedAmount);
 
     const fee = toSatoshi(0.000005);
 
-    if (this._addressInfo !== undefined && this._addressInfo.final_balance > satoshiToSend + fee && this._addressInfo.txrefs !== undefined) {
+    if (
+      this._addressInfo !== undefined &&
+      this._addressInfo.final_balance > satoshiToSend + fee &&
+      this._addressInfo.txrefs !== undefined
+    ) {
       // enough balance
-      var txBuilder: TransactionBuilder = new bitcoin.TransactionBuilder(this._network);
+      var txBuilder: TransactionBuilder = new bitcoin.TransactionBuilder(
+        this._network
+      );
       var addedSatoshi = 0;
 
       // add tx inputs
-      for (let i = 0; addedSatoshi < satoshiToSend && i < this._addressInfo.txrefs.length; i += 1) {
+      for (
+        let i = 0;
+        addedSatoshi < satoshiToSend && i < this._addressInfo.txrefs.length;
+        i += 1
+      ) {
         const txRef = this._addressInfo.txrefs[i];
         txBuilder.addInput(txRef.tx_hash, i);
         addedSatoshi += txRef.value;
@@ -130,7 +140,7 @@ export default class Bitcoin extends IWallet {
       // add tx output
       txBuilder.addOutput(recipientId, satoshiToSend);
       if (addedSatoshi > satoshiToSend) {
-        txBuilder.addOutput(this.address, addedSatoshi- satoshiToSend - fee);
+        txBuilder.addOutput(this.address, addedSatoshi - satoshiToSend - fee);
       }
 
       txBuilder.sign(0, this._keyPair);

@@ -5,9 +5,23 @@
         <v-icon>mdi-window-close</v-icon>
       </v-btn>
     </div>
-    <div class="d-flex flex-column align-center justify-center mx-auto my-auto main">
-      <v-text-field :placeholder="placeholder" v-model="recipient" background-color="#212121" outlined class="input-recipient b-black" />
-      <v-text-field placeholder="Amount" v-model="amount" type="number" class="input-amount" :suffix="coin.ticker" />
+    <div
+      class="d-flex flex-column align-center justify-center mx-auto my-auto main"
+    >
+      <v-text-field
+        :placeholder="placeholder"
+        v-model="recipient"
+        background-color="#212121"
+        outlined
+        class="input-recipient b-black"
+      />
+      <v-text-field
+        placeholder="Amount"
+        v-model="amount"
+        type="number"
+        class="input-amount"
+        :suffix="coin.ticker"
+      />
       <v-btn class="my-5 send-btn" @click="onSend">Send</v-btn>
     </div>
   </div>
@@ -75,9 +89,9 @@ export default class WalletReceive extends Vue {
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
-      /* display: none; <- Crashes Chrome on hover */
-      -webkit-appearance: none;
-      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
   }
 }
 </style>
