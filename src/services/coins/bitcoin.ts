@@ -168,7 +168,7 @@ export default class Bitcoin extends IWallet {
   }
 
   private async _fetchAddressInfo() {
-    const response = await this._axiosInstance.get(`/addrs/${this.address}`);
+    const response = await this._axiosInstance.get(`/addrs/${this.address}?unspentOnly=true`);
     this._addressInfo = response.data;
   }
 
