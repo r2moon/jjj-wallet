@@ -1,17 +1,72 @@
 import * as bitcoin from "bitcoinjs-lib";
-import { ECPairInterface, Network } from "bitcoinjs-lib/types";
+import {
+  ECPairInterface,
+  Network,
+  TransactionBuilder
+} from "bitcoinjs-lib/types";
 import axios, { AxiosInstance } from "axios";
 
 import { IWallet } from "@/types";
 
+const SATOSHI = 100000000;
+const toSatoshi = (value: number) => {
+  return Math.round(value * SATOSHI);
+};
+
+const fromSatoshi = (value: number) => {
+  return value / SATOSHI;
+}
+
+/**
+ * Response Type of Blockcypher api
+ * https://www.blockcypher.com/dev/bitcoin/#address
+ */
+interface TxRef {
+  tx_hash: string;
+  block_height: number;
+  tx_input_n: number;
+  tx_output_n: number;
+  value: number;
+  ref_balance?: number;
+  spent: boolean;
+  confirmations: number;
+  confirmed?: Date;
+  double_spend: boolean;
+}
+
+interface AddrInfo {
+  address?: string;
+  total_received: number;
+  total_sent: number;
+  balance: number;
+  unconfirmed_balance: number;
+  final_balance: number;
+  txrefs?: Array<TxRef>;
+  unconfirmed_txrefs?: Array<TxRef>;
+  hasMore: boolean;
+}
+
+interface TX {
+  block_height: number;
+  hash: string;
+  addresses: Array<string>;
+  total: number;
+  fees: number;
+  size: number;
+  received: Date;
+  double_spend: boolean;
+  vin_sz: number;
+  vout_sz: number;
+  confirmations: number;
+  confirmed?: Date;
+}
+
 export default class Bitcoin extends IWallet {
-  _address: string = "";
-  _publicKey: string = "";
-  _privateKey: string = "";
-  _balance: number = 0;
-  _isTestnet: boolean = false;
-  _network: Network = bitcoin.networks.bitcoin;
-  _axiosInstance: AxiosInstance;
+  private _keyPair: ECPairInterface;
+  private _addressInfo?: AddrInfo;
+  private _isTestnet: boolean = false;
+  private _network: Network = bitcoin.networks.bitcoin;
+  private _axiosInstance: AxiosInstance;
 
   /**
    * Create new key if privateKey is null otherwise import wallet from privateKey
@@ -26,106 +81,101 @@ export default class Bitcoin extends IWallet {
       this._network = bitcoin.networks.testnet;
 
       this._axiosInstance = axios.create({
-        baseURL: "https://testnet.blockexplorer.com/api/",
+        baseURL: "https://api.blockcypher.com/v1/btc/test3/",
         timeout: 2000
-      })
+      });
     } else {
       this._isTestnet = false;
       this._network = bitcoin.networks.bitcoin;
 
       this._axiosInstance = axios.create({
-        baseURL: "https://blockexplorer.com/api/",
+        baseURL: "https://api.blockcypher.com/v1/btc/main",
         timeout: 2000
-      })
+      });
     }
 
-    var keyPair: ECPairInterface;
-
     if (privateKey) {
-      keyPair = bitcoin.ECPair.fromWIF(privateKey, this._network);
+      this._keyPair = bitcoin.ECPair.fromWIF(privateKey, this._network);
     } else {
-      keyPair = bitcoin.ECPair.makeRandom({
+      this._keyPair = bitcoin.ECPair.makeRandom({
         network: this._network
       });
     }
 
-    this._privateKey = keyPair.toWIF();
-    this._publicKey = keyPair.publicKey.toString("hex");
-    this._address = bitcoin.payments.p2pkh({
-      pubkey: keyPair.publicKey,
-      network: this._network
-    }).address!;
-
-    console.log(this._address);
     this.resync();
   }
 
   async send(recipientId: string, amount: string | number): Promise<string> {
-    // const amountWei = new BN(this.web3.utils.toWei(amount.toString()));
+    const parsedAmount: number = Number(amount);
+    if (Number.isNaN(parsedAmount)) {
+      throw new Error("Invalid amount: " + amount);
+    }
+    
+    const satoshiToSend = toSatoshi(parsedAmount);
 
-    // if (this._balance.cmp(amountWei) >= 0) {
-    //   // enough balance
-    //   var rawTx = {
-    //     nonce: this._nonce,
-    //     from: this.address,
-    //     to: recipientId,
-    //     value: amountWei.toString(),
-    //     gasPrice: "0x3b9aca00",
-    //     gasLimit: "0x21000",
-    //     data: ""
-    //   };
+    const fee = toSatoshi(0.000005);
 
-    //   // this.web3.eth.estimateGas(rawTx)
-    //   try {
-    //     const signedTx = await this.web3.eth.accounts.signTransaction(
-    //       rawTx,
-    //       this._privateKey
-    //     );
-    //     console.log(signedTx);
-    //     if (signedTx.rawTransaction) {
-    //       const txReceipt = await this.web3.eth.sendSignedTransaction(
-    //         signedTx.rawTransaction
-    //       );
-    //       console.log("==Receipt==");
-    //       console.log(txReceipt);
-    //       this._nonce += 1;
-    //       return txReceipt.transactionHash;
-    //     } else {
-    //       console.error("Invalid Transaction - rawTx is empty");
-    //       throw new Error("Invalid Transaction - rawTx is empty");
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // } else {
-    //   console.log("No enough balance");
-    //   throw new Error("No enough balance");
-    // }
-    // return "";
+    if (this._addressInfo !== undefined && this._addressInfo.final_balance > satoshiToSend + fee && this._addressInfo.txrefs !== undefined) {
+      // enough balance
+      var txBuilder: TransactionBuilder = new bitcoin.TransactionBuilder(this._network);
+      var addedSatoshi = 0;
+
+      // add tx inputs
+      for (let i = 0; addedSatoshi < satoshiToSend && i < this._addressInfo.txrefs.length; i += 1) {
+        const txRef = this._addressInfo.txrefs[i];
+        txBuilder.addInput(txRef.tx_hash, i);
+        addedSatoshi += txRef.value;
+      }
+
+      // add tx output
+      txBuilder.addOutput(recipientId, satoshiToSend);
+      if (addedSatoshi > satoshiToSend) {
+        txBuilder.addOutput(this.address, addedSatoshi- satoshiToSend - fee);
+      }
+
+      txBuilder.sign(0, this._keyPair);
+      const txHex = txBuilder.build().toHex();
+      console.log(txHex);
+
+      try {
+        const response = await this._axiosInstance.post("/txs/push", {
+          tx: txHex
+        });
+        const tx: TX = response.data;
+        return tx.hash;
+      } catch (error) {
+        console.error("send bitcoin error: ", error);
+        throw error;
+      }
+    } else {
+      console.log("No enough balance");
+      throw new Error("No enough balance");
+    }
   }
 
   async resync() {
-    this._fetchBalance();
+    this._fetchAddressInfo();
   }
 
-  private async _fetchBalance() {
-    try {
-      const response = await this._axiosInstance.get(`/addr/${this._address}`);
-      this._balance = response.data["balance"];
-    } catch (error) {
-      console.error(error);
-    }
+  private async _fetchAddressInfo() {
+    const response = await this._axiosInstance.get(`/addrs/${this.address}`);
+    this._addressInfo = response.data;
   }
 
   // getters
   public get address(): string {
-    return this._address;
+    const address = bitcoin.payments.p2pkh({
+      pubkey: this._keyPair.publicKey,
+      network: this._network
+    }).address!;
+
+    return address;
   }
 
-  public get balance(): string {
-    if (this._balance === null) {
-      return "0";
+  public get balance(): number {
+    if (this._addressInfo === undefined) {
+      return 0;
     }
-    return String(this._balance);
+    return fromSatoshi(this._addressInfo.final_balance);
   }
 }

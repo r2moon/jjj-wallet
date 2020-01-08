@@ -12,12 +12,6 @@ export interface SendInfo {
 }
 
 export abstract class IWallet {
-  abstract _address: string;
-  abstract _publicKey: string;
-  abstract _privateKey: string;
-  abstract _balance: BN | string | number | null;
-  abstract _isTestnet: boolean = false;
-
   /**
    * send tokens to receiver
    * @param recipientId receiver address
@@ -41,7 +35,7 @@ export abstract class IWallet {
   /**
    * get balance in string
    */
-  abstract get balance(): string;
+  abstract get balance(): string | number;
 }
 
 export interface Coin {
