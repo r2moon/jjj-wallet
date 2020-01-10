@@ -18,7 +18,7 @@ const importCoins = (isTestnet?: boolean): Array<Coin> => {
     info: {
       name: "Bitcoin",
       ticker: "BTC",
-      logo: require("@/assets/coins/ethereum/logo.png")
+      logo: require("@/assets/coins/bitcoin/logo.png")
     },
     wallet: new Bitcoin(
       // null,
