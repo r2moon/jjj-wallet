@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import Wallet from "@/components/Wallet/Wallet.vue";
+import { Wallet } from "@/components/Wallet";
 import { Coin, CoinInfo, IWallet } from "@/types";
 import { Ethereum } from "@/services/coins";
 import { importCoins } from "@/services/utils/coin";
