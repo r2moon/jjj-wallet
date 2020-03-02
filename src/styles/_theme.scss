@@ -1,0 +1,104 @@
+/**
+ * Theme colors
+ */
+
+.theme-dark {
+  /* general */
+  --theme-background: #1b1e20;
+  --theme-menu-background: #202428; 
+  --theme-wallet-menu-background: #353940;
+
+  --theme-text: #ffffff;
+  --theme-info-text: #6e7075;
+  --theme-info-text: #3e4247;
+  --theme-active-text: #ffffff;
+  --theme-inactive-text: #6e7075;
+
+  --theme-button: #02b9ff;
+  --theme-seperator: #38393d;
+
+  --theme-wallet-primary-text: #f3ba2f;
+  --theme-wallet-secondary-text: #627eea;
+
+  --theme-router-icon-home-default: url("../assets/icons/dark/home-default.png");
+  --theme-router-icon-home-hover: url("../assets/icons/dark/home-hover.png");
+  --theme-router-icon-home-active: url("../assets/icons/dark/home-active.png");
+
+  --theme-router-icon-wallet-default: url("../assets/icons/dark/wallet-default.png");
+  --theme-router-icon-wallet-hover: url("../assets/icons/dark/wallet-hover.png");
+  --theme-router-icon-wallet-active: url("../assets/icons/dark/wallet-active.png");
+
+  --theme-router-icon-exchange-default: url("../assets/icons/dark/exchange-default.png");
+  --theme-router-icon-exchange-hover: url("../assets/icons/dark/exchange-hover.png");
+  --theme-router-icon-exchange-active: url("../assets/icons/dark/exchange-active.png");
+
+  --theme-router-icon-backup-default: url("../assets/icons/dark/backup-default.png");
+  --theme-router-icon-backup-hover: url("../assets/icons/dark/backup-hover.png");
+  --theme-router-icon-backup-active: url("../assets/icons/dark/backup-active.png");
+
+  
+}
+
+.router-link-active .router-button-home:before {
+  background: var(--theme-router-icon-home-active) no-repeat;
+  background-size: cover;
+}
+
+.router-button-home:before {
+  content: "";
+  display: block;
+  background: var(--theme-router-icon-home-default) no-repeat;
+  background-size: cover;
+  width: 21px;
+  height: 21px;
+  float: left;
+  margin-right: 10px;
+}
+
+.router-link-active .router-button-wallet:before {
+  background: var(--theme-router-icon-wallet-active) no-repeat;
+  background-size: cover;
+}
+
+.router-button-wallet:before {
+  content: "";
+  display: block;
+  background: var(--theme-router-icon-wallet-default) no-repeat;
+  background-size: cover;
+  width: 21px;
+  height: 21px;
+  float: left;
+  margin-right: 10px;
+}
+
+.router-link-active .router-button-exchange:before {
+  background: var(--theme-router-icon-exchange-active) no-repeat;
+  background-size: cover;
+}
+
+.router-button-exchange:before {
+  content: "";
+  display: block;
+  background: var(--theme-router-icon-exchange-default) no-repeat;
+  background-size: cover;
+  width: 21px;
+  height: 21px;
+  float: left;
+  margin-right: 10px;
+}
+
+.router-link-active .router-button-backup:before {
+  background: var(--theme-router-icon-backup-active) no-repeat;
+  background-size: cover;
+}
+
+.router-button-backup:before {
+  content: "";
+  display: block;
+  background: var(--theme-router-icon-backup-default) no-repeat;
+  background-size: cover;
+  width: 21px;
+  height: 21px;
+  float: left;
+  margin-right: 10px;
+}

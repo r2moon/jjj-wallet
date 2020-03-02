@@ -43,7 +43,21 @@ View the full documentation at https://tailwindcss.com.
 
 let colors = {
   // Custom color variables
-  "theme-background": "var(--theme-background)"
+  "theme-background": "var(--theme-background)",
+  "theme-menu-background": "var(--theme-menu-background)",
+  "theme-wallet-menu-background": "var(--theme-wallet-menu-background)",
+
+  "theme-text": "var(--theme-text)",
+  "theme-info-text": "var(--theme-info-text)",
+  "theme-info-text-dark": "var(--theme-info-text-dark)",
+  "theme-active-text": "var(--theme-active-text)",
+  "theme-inactive-text": "var(--theme-inactive-text)",
+
+  "theme-button": "var(--theme-button)",
+  "theme-seperator": "var(--theme-seperator)",
+
+  "theme-wallet-primary-text": "var(--theme-wallet-primary-text)",
+  "theme-wallet-secondary-text": "var(--theme-wallet-secondary-text)"
 };
 
 module.exports = {

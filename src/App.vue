@@ -13,7 +13,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { AppSideMenu } from "@/components/App";
-import "@/styles/style.css";
+import "@/styles/style.scss";
 
 export default Vue.extend({
   name: "App",
