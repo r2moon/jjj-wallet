@@ -1,14 +1,14 @@
 <template>
   <div class="wallet">
-    <div class="d-flex flex-column align-center">
-      <img :src="coinInfo.logo" class="wallet--logo" />
+    <div class="flex flex-col items-center">
+      <img :src="coinInfo.logo" class="w-30 h-30" />
       <h1>{{ wallet.balance }} {{ coinInfo.ticker }}</h1>
-      <div class="d-flex flex-row mt-5">
+      <div class="flex flex-row mt-5">
         <div class="float-right">
           <v-btn
             outlined
             @click="toggleSendOverlay"
-            class="send--receive-btn mr-2"
+            class="w-32 h-5 rounded-full mr-2"
           >
             SEND
           </v-btn>
@@ -17,7 +17,7 @@
           <v-btn
             outlined
             @click="toggleReceiveOverlay"
-            class="send--receive-btn ml-2"
+            class="w-32 h-5 rounded-full ml-2"
           >
             RECEIVE
           </v-btn>
@@ -79,11 +79,6 @@ export default class Wallet extends Vue {
 <style lang="scss">
 .wallet {
   padding: 20px;
-  .wallet--logo {
-    width: 128px;
-    height: 128px;
-  }
-
   .send--receive-btn {
     width: 150px;
     height: 40px;

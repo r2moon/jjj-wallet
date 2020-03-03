@@ -1,9 +1,10 @@
 <template>
-  <div class="Wallets">
+  <div>
     <v-tabs vertical>
       <v-tab
         :key="`tab-${coin.info.name}${index}`"
         v-for="(coin, index) in coins"
+        class="bg-theme-wallet-menu-background"
       >
         {{ coin.info.name }}
       </v-tab>

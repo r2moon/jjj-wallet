@@ -1,12 +1,10 @@
 .main-menu {
   .menu-router-link:hover {
     background: linear-gradient(90deg, var(--theme-wallet-hover-background-left), var(--theme-wallet-hover-background-right));
-    border-radius: 7px;
   }
 
   .router-link-active {
     background: linear-gradient(90deg, var(--theme-wallet-active-background-left), var(--theme-wallet-active-background-right));
-    border-radius: 7px;
   }
 
   .menu-router-link:hover .router-button-home:before {

@@ -1,6 +1,6 @@
 <template>
   <v-app class="theme-dark">
-    <div class="flex flex-row">
+    <div class="flex flex-row bg-theme-background">
       <AppSideMenu />
 
       <v-content>
