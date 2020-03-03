@@ -1,0 +1,95 @@
+.main-menu {
+  .menu-router-link:hover {
+    background: linear-gradient(90deg, var(--theme-wallet-hover-background-left), var(--theme-wallet-hover-background-right));
+    border-radius: 7px;
+  }
+
+  .router-link-active {
+    background: linear-gradient(90deg, var(--theme-wallet-active-background-left), var(--theme-wallet-active-background-right));
+    border-radius: 7px;
+  }
+
+  .menu-router-link:hover .router-button-home:before {
+    background: var(--theme-router-icon-home-hover) no-repeat;
+    background-size: cover;
+  }
+
+  .router-link-active .router-button-home:before {
+    background: var(--theme-router-icon-home-active) no-repeat;
+    background-size: cover;
+  }
+
+  .router-button-home:before {
+    content: "";
+    display: block;
+    background: var(--theme-router-icon-home-default) no-repeat;
+    background-size: cover;
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .menu-router-link:hover .router-button-wallet:before {
+    background: var(--theme-router-icon-wallet-hover) no-repeat;
+    background-size: cover;
+  }
+
+  .router-link-active .router-button-wallet:before {
+    background: var(--theme-router-icon-wallet-active) no-repeat;
+    background-size: cover;
+  }
+
+  .router-button-wallet:before {
+    content: "";
+    display: block;
+    background: var(--theme-router-icon-wallet-default) no-repeat;
+    background-size: cover;
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .menu-router-link:hover .router-button-exchange:before {
+    background: var(--theme-router-icon-exchange-hover) no-repeat;
+    background-size: cover;
+  }
+
+  .router-link-active .router-button-exchange:before {
+    background: var(--theme-router-icon-exchange-active) no-repeat;
+    background-size: cover;
+  }
+
+  .router-button-exchange:before {
+    content: "";
+    display: block;
+    background: var(--theme-router-icon-exchange-default) no-repeat;
+    background-size: cover;
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin-right: 10px;
+  }
+
+  .menu-router-link:hover .router-button-backup:before {
+    background: var(--theme-router-icon-backup-hover) no-repeat;
+    background-size: cover;
+  }
+
+  .router-link-active .router-button-backup:before {
+    background: var(--theme-router-icon-backup-active) no-repeat;
+    background-size: cover;
+  }
+
+  .router-button-backup:before {
+    content: "";
+    display: block;
+    background: var(--theme-router-icon-backup-default) no-repeat;
+    background-size: cover;
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin-right: 10px;
+  }
+}

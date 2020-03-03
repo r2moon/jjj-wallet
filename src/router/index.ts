@@ -5,13 +5,26 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/home",
+    name: "Home",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/Exchange/Exchange.vue")
+  },
+  {
     path: "/wallets",
     name: "Wallets",
     component: () =>
       import(/* webpackChunkName: "about" */ "@/views/Wallet/Wallets.vue")
-  }, {
+  },
+  {
     path: "/exchange",
     name: "Exchange",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/Exchange/Exchange.vue")
+  },
+  {
+    path: "/backup",
+    name: "Backup",
     component: () =>
       import(/* webpackChunkName: "about" */ "@/views/Exchange/Exchange.vue")
   }
