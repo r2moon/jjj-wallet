@@ -7,10 +7,11 @@
   --theme-background: #1b1e20;
   --theme-menu-background: #202428; 
   --theme-wallet-menu-background: #353940;
+  --theme-wallet-info-background: #23262c;
 
   --theme-text: #ffffff;
+  --theme-info-header: #6f7175;
   --theme-info-text: #6e7075;
-  --theme-info-text: #3e4247;
   --theme-active-text: #ffffff;
   --theme-inactive-text: #6e7075;
 
@@ -20,8 +21,13 @@
   --theme-wallet-primary-text: #f3ba2f;
   --theme-wallet-secondary-text: #627eea;
 
-  --theme-wallet-active-background-left: #393e45;
-  --theme-wallet-active-background-right: #282c31;
+  --theme-button-background-left: #00bbff;
+  --theme-button-background-right: #4a35ff;
+  --theme-button-hover-background-left: #383ac0;
+  --theme-button-hover-background-right: #4393c3;
+
+  --theme-router-link-active-background-left: #393e45;
+  --theme-router-link-active-background-right: #282c31;
 
   --theme-wallet-hover-background-left: #2d3137;
   --theme-wallet-hover-background-right: #25282d;

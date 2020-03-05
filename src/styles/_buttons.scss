@@ -1,10 +1,14 @@
+button:focus {
+  outline:0;
+}
+
 .main-menu {
   .menu-router-link:hover {
     background: linear-gradient(90deg, var(--theme-wallet-hover-background-left), var(--theme-wallet-hover-background-right));
   }
 
   .router-link-active {
-    background: linear-gradient(90deg, var(--theme-wallet-active-background-left), var(--theme-wallet-active-background-right));
+    background: linear-gradient(90deg, var(--theme-router-link-active-background-left), var(--theme-router-link-active-background-right));
   }
 
   .menu-router-link:hover .router-button-home:before {
@@ -90,4 +94,12 @@
     float: left;
     margin-right: 10px;
   }
+}
+
+.gradient-button {
+  background: linear-gradient(90deg, var(--theme-button-background-left), var(--theme-button-background-right));
+}
+
+.gradient-button:hover {
+  background: linear-gradient(90deg, var(--theme-button-hover-background-left), var(--theme-button-hover-background-right));
 }

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-tabs vertical>
+  <div class="h-full flex">
+    <v-tabs vertical background-color="transparent">
       <v-tab
         :key="`tab-${coin.info.name}${index}`"
         v-for="(coin, index) in coins"
@@ -11,6 +11,9 @@
       <v-tab-item
         :key="`tab-item-${coin.info.name}${index}`"
         v-for="(coin, index) in coins"
+        active-class="bg-theme-background"
+        transition="fade-transition"
+        reverse-transition="fade-transition"
       >
         <Wallet :coin="coin" />
       </v-tab-item>
@@ -34,5 +37,3 @@ export default class Wallets extends Vue {
   coins: Array<Coin> = importCoins(true);
 }
 </script>
-
-<style lang="scss"></style>

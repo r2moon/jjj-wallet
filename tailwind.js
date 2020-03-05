@@ -46,10 +46,11 @@ let colors = {
   "theme-background": "var(--theme-background)",
   "theme-menu-background": "var(--theme-menu-background)",
   "theme-wallet-menu-background": "var(--theme-wallet-menu-background)",
+  "theme-wallet-info-background": "var(--theme-wallet-info-background)",
 
   "theme-text": "var(--theme-text)",
+  "theme-info-header": "var(--theme-info-header)",
   "theme-info-text": "var(--theme-info-text)",
-  "theme-info-text-dark": "var(--theme-info-text-dark)",
   "theme-active-text": "var(--theme-active-text)",
   "theme-inactive-text": "var(--theme-inactive-text)",
 
