@@ -492,6 +492,7 @@ module.exports = {
 
     minWidth: {
       "0": "0",
+      "64": "16rem",
       "1/4": "25%", // Added
       full: "100%"
     },

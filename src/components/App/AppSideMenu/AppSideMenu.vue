@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-theme-menu-background p-6 w-64">
+  <div class="bg-theme-menu-background p-6 min-w-64">
     <div
       class="flex flex-col items-center border-dashed border-b-2 border-theme-seperator"
     >

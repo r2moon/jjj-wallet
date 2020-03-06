@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex">
+  <div>
     <v-tabs vertical background-color="transparent">
       <v-tab
         :key="`tab-${coin.info.name}${index}`"
@@ -11,7 +11,7 @@
       <v-tab-item
         :key="`tab-item-${coin.info.name}${index}`"
         v-for="(coin, index) in coins"
-        active-class="bg-theme-background"
+        active-class="bg-theme-background h-screen"
         transition="fade-transition"
         reverse-transition="fade-transition"
       >
