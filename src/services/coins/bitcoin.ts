@@ -1,9 +1,11 @@
-import * as bitcoin from "bitcoinjs-lib";
+import * as bitcoinjs from "bitcoinjs-lib";
 import {
   ECPairInterface,
   Network,
   TransactionBuilder
 } from "bitcoinjs-lib/types";
+import { utils } from "crypto-lib";
+
 import axios, { AxiosInstance } from "axios";
 
 import { IWallet } from "@/types";
@@ -62,23 +64,60 @@ interface TX {
 }
 
 export default class Bitcoin extends IWallet {
+  private _mnemonic: string;
+  private _address: string;
   private _keyPair: ECPairInterface;
   private _addressInfo?: AddrInfo;
   private _isTestnet: boolean = false;
-  private _network: Network = bitcoin.networks.bitcoin;
+  private _network: Network = bitcoinjs.networks.bitcoin;
   private _axiosInstance: AxiosInstance;
 
-  /**
-   * Create new key if privateKey is null otherwise import wallet from privateKey
-   *
-   * @param privateKey {string} optional
-   */
-  constructor(privateKey?: string | null, isTestnet?: boolean) {
+  // /**
+  //  * Create new key if privateKey is null otherwise import wallet from privateKey
+  //  *
+  //  * @param privateKey {string} optional
+  //  */
+  // constructor(privateKey?: string | null, isTestnet?: boolean) {
+  //   super();
+
+  //   if (isTestnet === true) {
+  //     this._isTestnet = true;
+  //     this._network = bitcoinjs.networks.testnet;
+
+  //     this._axiosInstance = axios.create({
+  //       baseURL: "https://api.blockcypher.com/v1/btc/test3/",
+  //       timeout: 2000
+  //     });
+  //   } else {
+  //     this._isTestnet = false;
+  //     this._network = bitcoinjs.networks.bitcoin;
+
+  //     this._axiosInstance = axios.create({
+  //       baseURL: "https://api.blockcypher.com/v1/btc/main",
+  //       timeout: 2000
+  //     });
+  //   }
+
+  //   if (privateKey) {
+  //     this._keyPair = bitcoinjs.ECPair.fromWIF(privateKey, this._network);
+  //   } else {
+  //     this._keyPair = bitcoinjs.ECPair.makeRandom({
+  //       network: this._network
+  //     });
+  //   }
+
+  //   this.resync();
+  // }
+
+  constructor(mnemonic: string, isTestnet?: boolean) {
     super();
+
+    this._mnemonic = mnemonic;
+    const wif = utils.seedToWif(mnemonic);
 
     if (isTestnet === true) {
       this._isTestnet = true;
-      this._network = bitcoin.networks.testnet;
+      this._network = bitcoinjs.networks.testnet;
 
       this._axiosInstance = axios.create({
         baseURL: "https://api.blockcypher.com/v1/btc/test3/",
@@ -86,7 +125,7 @@ export default class Bitcoin extends IWallet {
       });
     } else {
       this._isTestnet = false;
-      this._network = bitcoin.networks.bitcoin;
+      this._network = bitcoinjs.networks.bitcoin;
 
       this._axiosInstance = axios.create({
         baseURL: "https://api.blockcypher.com/v1/btc/main",
@@ -94,13 +133,12 @@ export default class Bitcoin extends IWallet {
       });
     }
 
-    if (privateKey) {
-      this._keyPair = bitcoin.ECPair.fromWIF(privateKey, this._network);
-    } else {
-      this._keyPair = bitcoin.ECPair.makeRandom({
-        network: this._network
-      });
-    }
+    this._keyPair = bitcoinjs.ECPair.fromWIF(wif);
+
+    this._address = bitcoinjs.payments.p2pkh({
+      pubkey: this._keyPair.publicKey,
+      network: this._network
+    }).address!;
 
     this.resync();
   }
@@ -121,7 +159,7 @@ export default class Bitcoin extends IWallet {
       this._addressInfo.txrefs !== undefined
     ) {
       // enough balance
-      var txBuilder: TransactionBuilder = new bitcoin.TransactionBuilder(
+      var txBuilder: TransactionBuilder = new bitcoinjs.TransactionBuilder(
         this._network
       );
       var addedSatoshi = 0;
@@ -168,18 +206,15 @@ export default class Bitcoin extends IWallet {
   }
 
   private async _fetchAddressInfo() {
-    const response = await this._axiosInstance.get(`/addrs/${this.address}?unspentOnly=true`);
+    const response = await this._axiosInstance.get(
+      `/addrs/${this.address}?unspentOnly=true`
+    );
     this._addressInfo = response.data;
   }
 
   // getters
   public get address(): string {
-    const address = bitcoin.payments.p2pkh({
-      pubkey: this._keyPair.publicKey,
-      network: this._network
-    }).address!;
-
-    return address;
+    return this._address;
   }
 
   public get balance(): number {
