@@ -1,6 +1,6 @@
 import Key from "./Key";
 import utils from "./utils";
-import Address from "./Address";
+// import Address from "./Address";
 import WalletCore from "./Wallet";
 /*
 import { getHistory } from "./Transaction/bitcoin";
@@ -23,5 +23,5 @@ const test = async () => {
 */
 export * from "./types";
 
-export { utils, Address, Key };
+export { utils, Key };
 export { WalletCore };

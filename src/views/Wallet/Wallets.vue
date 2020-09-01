@@ -5,8 +5,7 @@
         :key="`wallet-tab-${coin.id}`"
         v-for="coin in wallet.coins"
         class="bg-theme-wallet-menu-background"
-        >{{ coin.name }}</v-tab
-      >
+      >{{ coin.name }}</v-tab>
       <v-tab-item
         :key="`tab-item-${coin.name}`"
         v-for="coin in wallet.coins"
@@ -23,15 +22,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Wallet } from "@/components/Wallet";
-import { Coin, CoinInfo, IWallet } from "@/types";
 import { WalletCore } from "@/crypto-lib";
 
 @Component({
   components: {
-    Wallet,
-  },
+    Wallet
+  }
 })
 export default class Wallets extends Vue {
-  wallet = new WalletCore();
+  wallet = new WalletCore("much butter trick country please fish window resist brand pledge end fire");
 }
 </script>

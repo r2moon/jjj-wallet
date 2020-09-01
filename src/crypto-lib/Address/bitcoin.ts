@@ -3,20 +3,27 @@ import axios from "axios";
 
 import { getNetwork } from "../Network/bitcoin";
 
-import Key, { seedToWif } from "../Key";
+import Key from "../Key";
 import { getApi } from "../config";
 
 import { BitcoinTrezorAddressInfo } from "../types/bitcoin";
 import { InvalidAddress } from "../Error";
 import { CoinType } from "../types";
 
-export const generateAddress = (seed: string, isTestnet?: boolean): string => {
+import * as bip39 from "bip39";
+
+export const generateAddress = (
+  seed: string,
+  derivationPath: string
+): string => {
   Key.validateMnemonic(seed);
 
-  const network = getNetwork(isTestnet);
+  const network = getNetwork();
 
-  const wif = seedToWif(seed, network);
-
+  const seedBuffer = bip39.mnemonicToSeedSync(seed);
+  const node = bitcoinjs.bip32.fromSeed(seedBuffer, network);
+  const child = node.derivePath(derivationPath);
+  const wif = child.toWIF();
   const keyPair = bitcoinjs.ECPair.fromWIF(wif, network);
 
   const address = bitcoinjs.payments.p2pkh({
@@ -27,8 +34,8 @@ export const generateAddress = (seed: string, isTestnet?: boolean): string => {
   return address;
 };
 
-export const validateAddress = (address: string, isTestnet?: boolean) => {
-  const network = getNetwork(isTestnet);
+export const validateAddress = (address: string) => {
+  const network = getNetwork();
 
   try {
     bitcoinjs.address.toOutputScript(address, network);

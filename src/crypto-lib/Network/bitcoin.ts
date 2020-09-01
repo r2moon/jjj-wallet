@@ -1,9 +1,11 @@
 import * as bitcoinjs from "bitcoinjs-lib";
 import { Network } from "bitcoinjs-lib/types";
 
-export const getNetwork = (isTestnet?: boolean): Network => {
+import WalletNetwork from ".";
+
+export const getNetwork = (): Network => {
   let network: Network = bitcoinjs.networks.bitcoin;
-  if (isTestnet) {
+  if (WalletNetwork.isTestnet) {
     network = bitcoinjs.networks.testnet;
   }
 

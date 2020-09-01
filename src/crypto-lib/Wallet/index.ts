@@ -18,11 +18,21 @@ export default class WalletCore {
 
   address(coinType: CoinType): string {
     if (coinType.isEqualWith(CoinType.Bitcoin)) {
-      return BitcoinAddress.generateAddress(this._seedPhrase, isTestnet);
+      return BitcoinAddress.generateAddress(
+        this._seedPhrase,
+        coinType.derivationPath
+      );
     }
     throw new UnsupportedCoinType();
   }
 
+  async humanBalance(coinType: CoinType): Promise<string> {
+    const address = this.address(coinType);
+    if (coinType.isEqualWith(CoinType.Bitcoin)) {
+      return BitcoinAddress.getHumanBalance(address, isTestnet);
+    }
+    throw new UnsupportedCoinType();
+  }
   get coins(): CoinType[] {
     return CoinType.coins;
   }

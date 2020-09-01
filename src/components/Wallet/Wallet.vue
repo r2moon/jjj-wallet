@@ -3,14 +3,12 @@
     <div class="flex flex-col items-center">
       <!-- <img :src="coinInfo.logo" class="w-30 h-30" /> -->
       <div class="text-theme-wallet-primary-text">
-        <span class="text-5xl font-bold">{{ 0.0 }}&nbsp;</span>
+        <span class="text-5xl font-bold">{{ balance }}&nbsp;</span>
         <span class="text-2xl">{{ coin.symbol }}</span>
       </div>
       <div>
         <span class="text-xl text-theme-info-text font-bold">$</span>
-        <span class="text-2xl text-theme-text font-bold"
-          >&nbsp;{{ 200.04 }}&nbsp;</span
-        >
+        <span class="text-2xl text-theme-text font-bold">&nbsp;{{ 200.00 }}&nbsp;</span>
         <span class="text-xl text-theme-info-text">USD</span>
       </div>
       <div class="flex flex-row mt-5">
@@ -18,17 +16,13 @@
           <button
             @click="toggleSendOverlay"
             class="w-48 h-12 rounded-lg mr-2 gradient-button text-theme-text text-lg"
-          >
-            SEND
-          </button>
+          >SEND</button>
         </div>
         <div class="float-left">
           <button
             @click="toggleReceiveOverlay"
             class="w-48 h-12 rounded-lg mr-2 gradient-button text-theme-text text-lg"
-          >
-            RECEIVE
-          </button>
+          >RECEIVE</button>
         </div>
       </div>
       <div class="mt-5 flex w-full max-w-full">
@@ -36,28 +30,28 @@
           <v-expansion-panel>
             <v-expansion-panel-header
               class="bg-theme-wallet-info-background border-dashed border-b border-theme-seperator text-theme-info-header"
-              >PRICE</v-expansion-panel-header
-            >
+            >PRICE</v-expansion-panel-header>
             <v-expansion-panel-content
               class="bg-theme-wallet-info-background text-theme-info-text pt-3"
-              >Binance Coint (BNB) is the native token of Binance Chain and the
+            >
+              Binance Coint (BNB) is the native token of Binance Chain and the
               key base asset on the Binance decentralalized exchange (DEX). It
               is used to pay the transaction fees of assets that live on Binance
-              Chain.</v-expansion-panel-content
-            >
+              Chain.
+            </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
     </div>
     <!-- <v-overlay :value="overlaySend" opacity="0.9">
       <WalletSend :coin="coinInfo" @send="send" @close="toggleSendOverlay" />
-    </v-overlay> -->
+    </v-overlay>-->
     <v-overlay :value="overlayReceive" opacity="0.9">
-      <!-- <WalletReceive
+      <WalletReceive
         :address="walletCore.address(coin)"
         :name="coin.name"
         @close="toggleReceiveOverlay"
-      /> -->
+      />
     </v-overlay>
   </div>
 </template>
@@ -72,14 +66,19 @@ import { WalletCore } from "@/crypto-lib";
 @Component({
   components: {
     WalletSend,
-    WalletReceive,
-  },
+    WalletReceive
+  }
 })
 export default class Wallet extends Vue {
   overlayReceive: boolean = false;
   overlaySend: boolean = false;
   @Prop() coin!: CoinType;
   @Prop() walletCore!: WalletCore;
+  balance: string = "0.0";
+
+  mounted() {
+    this.updateBalance();
+  }
 
   send(sendInfo: SendInfo) {
     // this.wallet.send(sendInfo.recipient, sendInfo.amount);
@@ -91,6 +90,10 @@ export default class Wallet extends Vue {
 
   toggleSendOverlay() {
     this.overlaySend = !this.overlaySend;
+  }
+
+  async updateBalance() {
+    this.balance = await this.walletCore.humanBalance(this.coin);
   }
 
   // get wallet(): IWallet {
