@@ -8,7 +8,7 @@ export interface CoinInfo {
 
 export interface SendInfo {
   recipient: string;
-  amount: number | string;
+  amount: string;
 }
 
 export abstract class IWallet {

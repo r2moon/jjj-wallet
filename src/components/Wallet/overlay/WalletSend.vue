@@ -30,11 +30,12 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit, Ref } from "vue-property-decorator";
 import { clipboard } from "electron";
-import { CoinInfo, SendInfo } from "@/types";
+import { SendInfo } from "@/types";
+import { CoinType } from "@/crypto-lib/types";
 
 @Component({})
 export default class WalletReceive extends Vue {
-  @Prop() coin!: CoinInfo;
+  @Prop() coin!: CoinType;
 
   recipient: string = "";
 
@@ -44,7 +45,7 @@ export default class WalletReceive extends Vue {
   onSend(): SendInfo {
     return {
       recipient: this.recipient,
-      amount: this.amount
+      amount: this.amount.toString()
     };
   }
   @Emit("close")

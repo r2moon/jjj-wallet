@@ -43,9 +43,9 @@
         </v-expansion-panels>
       </div>
     </div>
-    <!-- <v-overlay :value="overlaySend" opacity="0.9">
-      <WalletSend :coin="coinInfo" @send="send" @close="toggleSendOverlay" />
-    </v-overlay>-->
+    <v-overlay :value="overlaySend" opacity="0.9">
+      <WalletSend :coin="coin" @send="send" @close="toggleSendOverlay" />
+    </v-overlay>
     <v-overlay :value="overlayReceive" opacity="0.9">
       <WalletReceive
         :address="walletCore.address(coin)"
@@ -81,7 +81,8 @@ export default class Wallet extends Vue {
   }
 
   send(sendInfo: SendInfo) {
-    // this.wallet.send(sendInfo.recipient, sendInfo.amount);
+    console.log(sendInfo)
+    this.walletCore.send(this.coin, sendInfo.recipient, sendInfo.amount);
   }
 
   toggleReceiveOverlay() {
