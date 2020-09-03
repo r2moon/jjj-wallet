@@ -16,5 +16,5 @@ export const fromSatoshi = (value: number) => {
 };
 
 export default {
-  encodeQueryData,
+  encodeQueryData
 };

@@ -15,5 +15,5 @@ export const validateMnemonic = (mnemonic: string) => {
 
 export default {
   generateMnemonic,
-  validateMnemonic,
+  validateMnemonic
 };

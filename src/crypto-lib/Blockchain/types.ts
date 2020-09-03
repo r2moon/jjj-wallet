@@ -1,4 +1,4 @@
 export enum BlockchainType {
   Bitcoin,
-  Ethereum,
+  Ethereum
 }

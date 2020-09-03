@@ -5,7 +5,8 @@
         :key="`wallet-tab-${coin.id}`"
         v-for="coin in wallet.coins"
         class="bg-theme-wallet-menu-background"
-      >{{ coin.name }}</v-tab>
+        >{{ coin.name }}</v-tab
+      >
       <v-tab-item
         :key="`tab-item-${coin.name}`"
         v-for="coin in wallet.coins"
@@ -30,6 +31,8 @@ import { WalletCore } from "@/crypto-lib";
   }
 })
 export default class Wallets extends Vue {
-  wallet = new WalletCore("much butter trick country please fish window resist brand pledge end fire");
+  wallet = new WalletCore(
+    "much butter trick country please fish window resist brand pledge end fire"
+  );
 }
 </script>

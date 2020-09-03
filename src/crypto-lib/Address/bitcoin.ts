@@ -28,7 +28,7 @@ export const generateAddress = (
 
   const address = bitcoinjs.payments.p2pkh({
     pubkey: keyPair.publicKey,
-    network: network,
+    network: network
   }).address!;
 
   return address;
@@ -64,5 +64,5 @@ export const getHumanBalance = async (
 export default {
   generateAddress,
   validateAddress,
-  getHumanBalance,
+  getHumanBalance
 };

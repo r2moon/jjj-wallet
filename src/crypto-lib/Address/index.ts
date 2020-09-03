@@ -1,1 +1,1 @@
-export {default as BitcoinAddress} from './bitcoin'
+export { default as BitcoinAddress } from "./bitcoin";

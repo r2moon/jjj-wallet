@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as bitcoin from 'bitcoinjs-lib';
+import * as bitcoin from "bitcoinjs-lib";
 
 import { validateAddress } from "../Address/bitcoin";
 import { encodeQueryData, toSatoshi } from "../utils";
@@ -8,9 +8,9 @@ import { getApi } from "../config";
 import { TxFilterOptions, CoinType } from "../types";
 import {
   BitcoinTrezorAddressInfo,
-  BitcoinTrezorTxResponse,
+  BitcoinTrezorTxResponse
 } from "../types/bitcoin";
-import { getEcPair } from '../Key/bitcoin';
+import { getEcPair } from "../Key/bitcoin";
 
 export const getTxIds = async (
   address: string,
@@ -40,11 +40,11 @@ export const getHistory = async (
 
   const api = getApi(CoinType.Bitcoin, isTestnet);
 
-  const promiseList = txIds.map((txId) => axios.get(api + "/tx/" + txId));
+  const promiseList = txIds.map(txId => axios.get(api + "/tx/" + txId));
 
   const txsRes = await Promise.all(promiseList);
   const txRedableRes = txsRes.map(
-    (txRes) => txRes.data as BitcoinTrezorTxResponse
+    txRes => txRes.data as BitcoinTrezorTxResponse
   );
   return txRedableRes;
 };
@@ -64,25 +64,25 @@ export const send = async (
 
     const ecpair = await getEcPair(seedPhrase, network);
 
-    console.log(Number(amount))
+    console.log(Number(amount));
     const amountSatoshi = toSatoshi(Number(amount));
-    console.log(amountSatoshi)
+    console.log(amountSatoshi);
     const fee = toSatoshi(0.0005);
     const satoshiWithoutFee = amountSatoshi - fee;
-    const {address} = bitcoin.payments.p2pkh({
+    const { address } = bitcoin.payments.p2pkh({
       pubkey: ecpair.publicKey,
-      network,
+      network
     });
 
-    console.log(address)
+    console.log(address);
     const psbt = new bitcoin.Psbt({
-      network,
+      network
     });
     let addedSatoshi = 0;
 
     const api = getApi(CoinType.Bitcoin, isTestnet);
 
-    const res = await axios.get(api + '/utxo/' + address);
+    const res = await axios.get(api + "/utxo/" + address);
 
     const utxoTxs = res.data;
     for (
@@ -91,23 +91,23 @@ export const send = async (
       i += 1
     ) {
       const txRef = utxoTxs[i];
-      const txRes = await axios.get(api + '/tx/' + txRef.txid);
+      const txRes = await axios.get(api + "/tx/" + txRef.txid);
       psbt.addInput({
         hash: txRef.txid,
         index: txRef.vout,
-        nonWitnessUtxo: Buffer.from(txRes.data.hex, 'hex'),
+        nonWitnessUtxo: Buffer.from(txRes.data.hex, "hex")
       });
       addedSatoshi += txRef.satoshis;
     }
     // add tx output
     psbt.addOutput({
       address: recipient,
-      value: satoshiWithoutFee,
+      value: satoshiWithoutFee
     });
     if (addedSatoshi > amountSatoshi) {
       psbt.addOutput({
         address: address!,
-        value: addedSatoshi - amountSatoshi,
+        value: addedSatoshi - amountSatoshi
       });
     }
     const txHex = psbt
@@ -116,12 +116,12 @@ export const send = async (
       .extractTransaction()
       .toHex();
 
-    const response = await axios.get(api + '/sendtx/' + txHex);
+    const response = await axios.get(api + "/sendtx/" + txHex);
     const txRes = response.data;
     return txRes.result;
   } catch (error) {
-    console.error('send bitcoin error: ', error);
-    throw new Error('Send bitcoin failure');
+    console.error("send bitcoin error: ", error);
+    throw new Error("Send bitcoin failure");
   }
 };
 

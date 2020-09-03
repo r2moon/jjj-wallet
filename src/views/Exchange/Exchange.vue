@@ -1,5 +1,3 @@
 <template>
-  <div class="Exchange">
-    Exchange
-  </div>
+  <div class="Exchange">Exchange</div>
 </template>

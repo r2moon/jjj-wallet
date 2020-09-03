@@ -6,9 +6,9 @@ const networks = {
   bitcoin: {
     api: {
       mainnet: "https://btc-bitcore1.trezor.io/api",
-      testnet: "https://tbtc1.trezor.io/api",
-    },
-  },
+      testnet: "https://tbtc1.trezor.io/api"
+    }
+  }
 };
 
 export const getApi = (coin: CoinType, isTestnet?: boolean): string => {

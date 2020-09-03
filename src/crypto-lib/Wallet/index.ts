@@ -1,10 +1,10 @@
 import { CoinType } from "..";
 import { generateMnemonic } from "../Key";
 import { UnsupportedCoinType } from "../Error";
-import {BitcoinAddress} from "../Address";
-import { BitcoinTransaction } from '../Transaction';
+import { BitcoinAddress } from "../Address";
+import { BitcoinTransaction } from "../Transaction";
 
-const isTestnet = false//process.env.NODE_ENV === "development";
+const isTestnet = false; //process.env.NODE_ENV === "development";
 
 export default class WalletCore {
   private _seedPhrase: string;
@@ -35,9 +35,18 @@ export default class WalletCore {
     throw new UnsupportedCoinType();
   }
 
-  async send(coinType: CoinType, recipient: string, amount: string): Promise<string> {
+  async send(
+    coinType: CoinType,
+    recipient: string,
+    amount: string
+  ): Promise<string> {
     if (coinType.isEqualWith(CoinType.Bitcoin)) {
-      return BitcoinTransaction.send(this._seedPhrase, recipient, amount, isTestnet);
+      return BitcoinTransaction.send(
+        this._seedPhrase,
+        recipient,
+        amount,
+        isTestnet
+      );
     }
     throw new UnsupportedCoinType();
   }

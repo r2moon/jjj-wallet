@@ -1,8 +1,11 @@
-import * as bitcoin from 'bitcoinjs-lib';
-import { CoinType } from '../types';
-const bip39 = require('bip39');
+import * as bitcoin from "bitcoinjs-lib";
+import { CoinType } from "../types";
+const bip39 = require("bip39");
 
-export const getEcPair = async (seedPhrase: string, network?: bitcoin.networks.Network) => {
+export const getEcPair = async (
+  seedPhrase: string,
+  network?: bitcoin.networks.Network
+) => {
   try {
     const seedBuffer = await bip39.mnemonicToSeed(seedPhrase);
     const node = bitcoin.bip32.fromSeed(seedBuffer, network);

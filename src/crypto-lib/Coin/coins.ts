@@ -1,7 +1,7 @@
 import { CoinInfo } from "..";
 export enum BlockchainType {
   Bitcoin,
-  Ethereum,
+  Ethereum
 }
 
 const testnetCoins: CoinInfo[] = [
@@ -13,8 +13,8 @@ const testnetCoins: CoinInfo[] = [
     derivationPath: "m/84'/0'/0'/0/0",
     blockchain: BlockchainType.Bitcoin,
     info: {
-      api: "https://tbtc1.trezor.io/api",
-    },
+      api: "https://tbtc1.trezor.io/api"
+    }
   },
   {
     id: "ethereum",
@@ -25,9 +25,9 @@ const testnetCoins: CoinInfo[] = [
     blockchain: BlockchainType.Ethereum,
     info: {
       chainId: 3,
-      rpc: "https://ropsten.infura.io/v3/e1c842025e964ba98347121c45861f82",
-    },
-  },
+      rpc: "https://ropsten.infura.io/v3/e1c842025e964ba98347121c45861f82"
+    }
+  }
 ];
 
 const mainnetCoins: CoinInfo[] = [
@@ -39,8 +39,8 @@ const mainnetCoins: CoinInfo[] = [
     derivationPath: "m/84'/0'/0'/0/0",
     blockchain: BlockchainType.Bitcoin,
     info: {
-      api: "https://btc-bitcore1.trezor.io/api",
-    },
+      api: "https://btc-bitcore1.trezor.io/api"
+    }
   },
   {
     id: "ethereum",
@@ -51,9 +51,9 @@ const mainnetCoins: CoinInfo[] = [
     blockchain: BlockchainType.Ethereum,
     info: {
       chainId: 3,
-      rpc: "https://mainnet.infura.io/v3/e1c842025e964ba98347121c45861f82",
-    },
-  },
+      rpc: "https://mainnet.infura.io/v3/e1c842025e964ba98347121c45861f82"
+    }
+  }
 ];
 
 export const getCoinInfo = (isTestnet?: boolean): CoinInfo[] => {
@@ -67,7 +67,7 @@ export const getCoinInfoById = (
   id: string,
   isTestnet?: boolean
 ): CoinInfo | undefined => {
-  const coinInfo = getCoinInfo(isTestnet).find((item) => item.id === id);
+  const coinInfo = getCoinInfo(isTestnet).find(item => item.id === id);
   return coinInfo;
 };
 export default mainnetCoins;

@@ -1,1 +1,1 @@
-export {default as BitcoinTransaction} from './bitcoin'
+export { default as BitcoinTransaction } from "./bitcoin";
